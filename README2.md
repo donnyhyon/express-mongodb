@@ -21,8 +21,9 @@ npm i nodemon --save-dev
 ```
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
+    "start": "node server.js",
     "dev": "nodemon ."
+    }
 ```
 5. Make project folder structure and files.
 ```
@@ -35,4 +36,59 @@ touch routes/user.js
 touch models/user.model.js
 touch controllers/user.controller.js
 ```
-6. 
+6. Update package.json "main" with new file names.
+```
+  "main": "server.js",
+```
+7. Build express server within server.js
+```
+const express = require("express")
+const app = express()
+const port = process.env.port || 3000
+
+app.listen(port, () => {
+	console.log(`Server running on port: ${port}`)
+})
+```
+8. Confirm server can run.
+```
+npm run dev
+```
+Your terminal should confirm your server is running and display port number.
+
+### Creating MongoDB connection.
+9. Create free [MongoDB Atlas account](https://account.mongodb.com/account/login)
+10. Create a cluster and connect to your cluster via MongoDB's native driver. 
+![1-create new project](1_create_new_project.png)
+![2-name new project](2_naming_new_project.png)
+![3-confirm proj name](3_confirm_proj_name.png)
+![4-create database](4_create_database.png)
+![5-database settings](5_use_free_settings.png)
+![6-create cluster](6_create_defaukt_cluster.png)
+![7-create user and password](7_create_user_pass.png)
+![8-cluster loading](8_waiting_for_cluster.png)
+![9-connect to cluster](9_connect_cluster.png)
+![10-connect to cluster](10_connect_to_cluster.png)
+![11-cluster application code](11_cluster_application_code.png)
+
+11. Create new .env file to store database application code.
+```
+touch .env
+```
+12. Copy and paste the application code into .env file. Replace <username> & <password> with the password you created during projet set-up. 
+```
+ATLAS_URI = mongodb+srv://<username>:<password>@cluster0.ib7cc.mongodb.net/?retryWrites=true&w=majority
+```
+
+
+
+Setup Mongoose within server.js file.
+```
+const mongoose = require('mongoose')
+const uri = process.env.ATLAS_URI
+
+mongoose.connect(uri)    
+const db = mongoose.connection
+
+app.use(express.json())
+```
