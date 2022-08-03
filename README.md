@@ -1,158 +1,116 @@
-This is wrong- needs edited. 
-
-Goal is to create a sign-up page for the document storage application.
-User interacts with front end,
-fills out form,
-    name
-    email
-    dob
-    telephone
-    address
-    contact preferences
-stores users details using mongoDB
-displays users details upon query.
-    user GET, POST, PATCH, DELETE data.
+### Building REST API with Express and Mongoose
+This step by step tutorial was developed referencing the following resources:
+[mdn_web docs](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes) & [rahmanfadhil](https://rahmanfadhil.com/express-rest-api/)
 
 
----Steps:---
+1. Make new project directory. 
+```
+mkdir <folder_name>
+```
+2. Change directory into new project folder.
+``` 
+cd <folder_name>
+```
+3. Initialise npm and install dependancies.
+```
 npm init -y
 npm i express mongoose dotenv
 npm i nodemon --save-dev
-
-
----within package.json file---
+```
+4. Update package.json file for run scripts.
+```
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
+    "start": "node server.js",
     "dev": "nodemon ."
-
------
-
----Make file structures:---
-mkdir public
-mkdir public/images
-mkdir public/javascripts
-mkdir public/stylesheets
+    }
+```
+5. Make project folder structure and files.
+```
 mkdir controllers
 mkdir models
 mkdir routes
-mkdir views
 
-touch public/stylesheets/style.css
-touch routes/index.js
-touch routes/users.js
-touch views/index.html
-touch app.js
-touch models/users.js
-touch controllers/user.models.js
-
-
----within app.js---
-var express = require('express');
-var path = require('path');
-
-var port = process.env.port || 3000
-
-var app = express()
-
-var indexRouter = require('./routes/index')
-var usersRouter = require('./routes/users')
-
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
-
-app.use(express.json())
-
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+touch server.js
+touch routes/user.js
+touch models/user.model.js
+touch controllers/user.controller.js
+```
+6. Update package.json "main" with new file names.
+```
+  "main": "server.js",
+```
+7. Build express server within server.js
+```
+const express = require("express")
+const app = express()
+const port = process.env.port || 3000
 
 app.listen(port, () => {
-    console.log(`listening on port: ${port}`)
+	console.log(`Server running on port: ${port}`)
 })
+```
+8. Confirm server can run.
+```
+npm run dev
+```
+Your terminal should confirm your server is running and display port number.
 
-module.exports = app
+### Creating MongoDB connection.
+9. Create free [MongoDB Atlas account](https://account.mongodb.com/account/login)
 
----within routes/index.js---
-var express = require('express')
-var router = express.Router()
+10. Create a cluster and connect to your cluster via MongoDB's native driver. 
+Create new project
+![1-create new project](./READMEimages/1_create_new_project.png)
 
-router.get('/', function(req, res) {
-  res.send('respond with a resource')
-})
+Name new project
+![2-name new project](./READMEimages/2_naming_new_project.png)
 
-module.exports = router
+Confirming project name
+![3-confirm proj name](./READMEimages/3_confirm_proj_name.png)
+
+Create the database
+![4-create database](./READMEimages/4_create_database.png)
+
+Confirm database settings- use the free version!
+![5-database settings](./READMEimages/5_use_free_settings.png)
+
+Create a new cluster
+![6-create cluster](./READMEimages/6_create_defaukt_cluster.png)
+
+Create username and password for cluster
+![7-create user and password](./READMEimages/7_create_user_pass.png)
+
+Wait for cluster to build
+![8-cluster loading](./READMEimages/8_waiting_for_cluster.png)
+
+Connect to the cluster
+![9-connect to cluster](./READMEimages/9_connect_cluster.png)
+
+Choose middle option
+![10-connect to cluster](./READMEimages/10_connect_to_cluster.png)
+
+Copy the application code for next step. 
+![11-cluster application code](./READMEimages/11_cluster_application_code.png)
+
+11. Create new .env file to store database application code.
+```
+touch .env
+```
+12. Copy and paste the application code into .env file. Replace <username> & <password> with the password you created during projet set-up. 
+```
+ATLAS_URI = mongodb+srv://<username>:<password>@cluster0.ib7cc.mongodb.net/?retryWrites=true&w=majority
+```
 
 
----within routes/users.js---
-var express = require('express')
-var router = express.Router()
 
-module.exports = router
------------------------
+Setup Mongoose within server.js file.
+```
+const mongoose = require('mongoose')
+const uri = process.env.ATLAS_URI
 
-npm run dev    #check if web page is loading
+mongoose.connect(uri)    
+const db = mongoose.connection
 
-
----inside models/users.js---
-var mongooose = require('mongoose')
-var Schema = mongooose.Schema
-
-var UserSchema = new Schema(
-    {
-        name: {type: String, required: true},
-        email: {type: String, required: true},
-        date_of_birth: {type: Date, required: true},
-        telephone: {type: Number, required: true},
-        address: {type: String, required: true},
-        contact_preferences: {type: Boolean, required: true}
-    }
-)
-
-module.exports = mongooose.model('User', UserSchema)
-
----inside controllers/user.model.js---
-
-var User = require('../models/users')
-
-// Display list of all Users.
-exports.user_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: User list')
-}
-
-// Display detail page for a specific User.
-exports.user_detail = function(req, res) {
-    res.send('NOT IMPLEMENTED: User detail: ' + req.params.id);
-}
-
-// Display User create form on GET.
-exports.user_create_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: User create GET')
-}
-
-// Handle User create on POST.
-exports.user_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: User create POST')
-}
-
-// Display User delete form on GET.
-exports.user_delete_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: User delete GET')
-}
-
-// Handle User delete on POST.
-exports.user_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: User delete POST')
-}
-
-// Display User update form on GET.
-exports.user_update_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: User update GET')
-}
-
-// Handle User update on POST.
-exports.user_update_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: User update POST')
-}
-
----
+app.use(express.json())
+```
