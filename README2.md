@@ -59,16 +59,27 @@ Your terminal should confirm your server is running and display port number.
 ### Creating MongoDB connection.
 9. Create free [MongoDB Atlas account](https://account.mongodb.com/account/login)
 10. Create a cluster and connect to your cluster via MongoDB's native driver. 
+Create new project
 ![1-create new project](./READMEimages/1_create_new_project.png)
+Name new project
 ![2-name new project](./READMEimages/2_naming_new_project.png)
+Confirming project name
 ![3-confirm proj name](./READMEimages/3_confirm_proj_name.png)
+Create the database
 ![4-create database](./READMEimages/4_create_database.png)
+Confirm database settings- use the free version!
 ![5-database settings](./READMEimages/5_use_free_settings.png)
+Create a new cluster
 ![6-create cluster](./READMEimages/6_create_defaukt_cluster.png)
+Create username and password for cluster
 ![7-create user and password](./READMEimages/7_create_user_pass.png)
+Wait for cluster to build
 ![8-cluster loading](./READMEimages/8_waiting_for_cluster.png)
+Connect to the cluster
 ![9-connect to cluster](./READMEimages/9_connect_cluster.png)
+Choose middle option
 ![10-connect to cluster](./READMEimages/10_connect_to_cluster.png)
+Copy the application code for next step. 
 ![11-cluster application code](./READMEimages/11_cluster_application_code.png)
 
 11. Create new .env file to store database application code.
