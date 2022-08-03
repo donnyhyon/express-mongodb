@@ -1,7 +1,6 @@
 ### Building REST API with Express and Mongoose
 This step by step tutorial was developed referencing the following resources:
-[mdn_web docs](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes)
-[rahmanfadhil](https://rahmanfadhil.com/express-rest-api/)
+[mdn_web docs](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes) & [rahmanfadhil](https://rahmanfadhil.com/express-rest-api/)
 
 
 1. Make new project directory. 
