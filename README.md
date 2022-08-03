@@ -122,7 +122,7 @@ const userSchema = mongoose.Schema({
 
 module.exports = mongoose.model("userSchema", userSchema)
 ```
-15. Creating controllers. In **controllers.user.controller.js**
+15. Creating controllers. In **controllers/user.controller.js**
 ```
 const userModel = require('./models/user.model')
 
@@ -200,4 +200,7 @@ router.delete("/delete_user/:id", user_controller.deleteUserByID)
 
 module.exports = router
 ```
-17. Update server.js to include routes.  
+17. Update **server.js** to include routes.  
+```
+const routes = require('./routes')
+```
