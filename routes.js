@@ -1,10 +1,8 @@
 const express = require("express")
-const { send } = require("process")
-const User = require("./user.model") 
 const router = express.Router()
+const User = require("./user.model") 
 const user_controller = require('./controller')
 
-// Get all posts
 router.get("/all_users", user_controller.getAllUsers)
 
 router.post('/new_user', user_controller.postNewUser)

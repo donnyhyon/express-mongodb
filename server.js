@@ -16,8 +16,9 @@ app.use(express.json())
 
 app.listen(port, () => {
     console.log(`Sever listening on port: ${port}`)
-app.use('/api', routes)
 })
+
+app.use('/api', routes)
     
 db.on('error', (error) => {
     console.log(error)

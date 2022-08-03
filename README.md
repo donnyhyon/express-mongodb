@@ -17,7 +17,7 @@ npm init -y
 npm i express mongoose dotenv
 npm i nodemon --save-dev
 ```
-4. Update package.json file for run scripts.
+4. Update **package.json** file for run scripts.
 ```
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -36,11 +36,11 @@ touch routes/user.js
 touch models/user.model.js
 touch controllers/user.controller.js
 ```
-6. Update package.json "main" with new file names.
+6. Update **package.json** "main" with new file names.
 ```
   "main": "server.js",
 ```
-7. Build express server within server.js
+7. Build express server within **server.js**
 ```
 const express = require("express")
 const app = express()
@@ -50,7 +50,7 @@ app.listen(port, () => {
 	console.log(`Server running on port: ${port}`)
 })
 ```
-8. Confirm server can run.
+8. Confirm server can run in **terminal**.
 ```
 npm run dev
 ```
@@ -93,18 +93,15 @@ Choose middle option
 Copy the application code for next step. 
 ![11-cluster application code](./READMEimages/11_cluster_application_code.png)
 
-11. Create new .env file to store database application code.
+11. Create new **.env** file to store database application code.
 ```
 touch .env
 ```
-12. Copy and paste the application code into .env file. Replace <username> & <password> with the password you created during projet set-up. 
+12. Copy and paste the application code into **.env** file. Replace <username> & <password> with the password you created during cluster set-up. 
 ```
 ATLAS_URI = mongodb+srv://<username>:<password>@cluster0.ib7cc.mongodb.net/?retryWrites=true&w=majority
 ```
-
-
-
-Setup Mongoose within server.js file.
+13. Setup Mongoose within **server.js** file.
 ```
 const mongoose = require('mongoose')
 const uri = process.env.ATLAS_URI
@@ -114,3 +111,93 @@ const db = mongoose.connection
 
 app.use(express.json())
 ```
+14. Creating database models / schema. In **models/user.model.js**
+```
+const mongoose = require("mongoose")
+
+const userSchema = mongoose.Schema({
+	name: String,
+	content: String,
+})
+
+module.exports = mongoose.model("userSchema", userSchema)
+```
+15. Creating controllers. In **controllers.user.controller.js**
+```
+const userModel = require('./models/user.model')
+
+exports.getAllUsers = async (req,res) => {
+    const all_users = await userModel.find()
+    res.send(all_users)
+}
+
+exports.postNewUser = async (req,res) => {
+    const new_user = new userModel({
+        name: req.body.name,
+        content: req.body.content
+    })
+    await new_user.save()
+    res.send(new_user)
+}
+
+exports.getUserByID = async(req,res) => {
+    try{
+        const one_user = await userModel.findOne({ _id: req.params.id })
+        res.send(one_user)
+    } catch {
+        res.status(404)
+        res.send({ error: "User doesn't exist!" })
+    }
+}
+
+exports.editUserByID = async(req,res) => {
+    try {
+        const edit_user = await userModel.findOne({ _id: req.params.id })
+    
+        if (req.body.name) {
+            edit_user.name = req.body.name
+        }
+    
+        if (req.body.content) {
+            edit_user.content = req.body.content
+        }
+    
+        await edit_user.save()
+        res.send(edit_user)
+    } catch {
+        res.status(404)
+        res.send({ error: "User doesn't exist!" })
+    }
+}
+
+exports.deleteUserByID = async (req,res) => {
+    try {
+        await userModel.deleteOne({ _id: req.params.id })
+        res.status(204).send()
+    } catch {
+        res.status(404)
+        res.send({ error: "Post doesn't exist!" })
+    }
+}
+```
+
+16. Create routes to handle CRUD actions. In **routes/user.js**
+```
+const express = require("express")
+const router = express.Router()
+const User = require("./models/user.model") 
+const user_controller = require('./controllers/user.controller.js')
+
+router.get("/all_users", user_controller.getAllUsers)
+
+router.post('/new_user', user_controller.postNewUser)
+
+router.get("/get_user/:id", user_controller.getUserByID)
+
+router.patch("/edit_user/:id", user_controller.editUserByID)
+
+router.delete("/delete_user/:id", user_controller.deleteUserByID)
+
+module.exports = router
+```
+17. Update server.js to include routes.  
