@@ -216,6 +216,7 @@ module.exports = router
 const routes = require('./routes/user')
 ```
 ###Full Code
+
 ####server.js
 ```
 const express = require("express")
