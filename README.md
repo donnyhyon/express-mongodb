@@ -111,7 +111,17 @@ mongoose.connect(uri)
 const db = mongoose.connection
 
 app.use(express.json())
+
+db.on('error', (error) => {
+    console.log(error)
+})
+
+db.once('connected',() => {
+    console.log('Database Connected')
+})
 ```
+You should get a message in the terminal confirming database connection. 
+
 14. Creating database models / schema. In **models/user.model.js**
 ```
 const mongoose = require("mongoose")
@@ -125,7 +135,7 @@ module.exports = mongoose.model("userSchema", userSchema)
 ```
 15. Creating controllers. In **controllers/user.controller.js**
 ```
-const userModel = require('./models/user.model')
+const userModel = require('../models/user.model')
 
 exports.getAllUsers = async (req,res) => {
     const all_users = await userModel.find()
@@ -186,8 +196,8 @@ exports.deleteUserByID = async (req,res) => {
 ```
 const express = require("express")
 const router = express.Router()
-const User = require("./models/user.model") 
-const user_controller = require('./controllers/user.controller.js')
+const User = require("../models/user.model") 
+const user_controller = require('../controllers/user.controller')
 
 router.get("/all_users", user_controller.getAllUsers)
 
@@ -203,5 +213,5 @@ module.exports = router
 ```
 17. Update **server.js** to include routes.  
 ```
-const routes = require('./routes')
+const routes = require('./routes/user')
 ```
