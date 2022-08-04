@@ -97,7 +97,7 @@ Copy the application code for next step.
 ```
 touch .env
 ```
-12. Copy and paste the application code into **.env** file. Replace <username> & <password> with the password you created during cluster set-up. 
+12. Copy and paste the application code into **.env** file. Replace <username> & <password> with the password you created during cluster set-up. The < > should be deleted.
 ```
 ATLAS_URI = mongodb+srv://<username>:<password>@cluster0.ib7cc.mongodb.net/?retryWrites=true&w=majority
 ```
