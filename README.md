@@ -248,6 +248,7 @@ db.once('connected',() => {
 })
 ```
 #### models/user.model.js
+```
 const mongoose = require("mongoose")
 
 const userSchema = mongoose.Schema({
@@ -256,8 +257,9 @@ const userSchema = mongoose.Schema({
 })
 
 module.exports = mongoose.model("userSchema", userSchema)
-
+```
 #### controllers/user.controller.js
+```
 const userModel = require('../models/user.model')
 
 exports.getAllUsers = async (req,res) => {
@@ -313,7 +315,9 @@ exports.deleteUserByID = async (req,res) => {
         res.send({ error: "Post doesn't exist!" })
     }
 }
+```
 #### routes/users.js
+```
 const express = require("express")
 const router = express.Router()
 const User = require("../models/user.model") 
@@ -330,3 +334,4 @@ router.patch("/edit_user/:id", user_controller.editUserByID)
 router.delete("/delete_user/:id", user_controller.deleteUserByID)
 
 module.exports = router
+```
