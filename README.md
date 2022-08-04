@@ -104,8 +104,9 @@ ATLAS_URI = mongodb+srv://<username>:<password>@cluster0.ib7cc.mongodb.net/?retr
 13. Setup Mongoose within **server.js** file.
 ```
 const mongoose = require('mongoose')
-const uri = process.env.ATLAS_URI
+require('dotenv').config();
 
+const uri = process.env.ATLAS_URI
 mongoose.connect(uri)    
 const db = mongoose.connection
 
