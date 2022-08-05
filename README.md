@@ -67,14 +67,14 @@ npm i -D jest supertest
 ```
 11. Create test file in root directory.
 ```
-touch app.test.js
+touch server.test.js
 ```
 12. Build test file. 
 Note: Supertest framework replaces the need for services like Postman or Insomnia i.e making GET/POST/PATCH/DELETE requests. [Supertest Docs](https://github.com/visionmedia/supertest)
 
 Jest is for unit testing, like RSpec for Ruby. [Jest Docs](https://jestjs.io/docs/api)
 
-Within **app.test.js**
+Within **server.test.js**
 ```
 const request = require('supertest')
 const app = require('./server')
@@ -83,7 +83,7 @@ const app = require('./server')
 describe('Mesaging API', () => {
     it('GET /all_users ---> array of users and message contents', () => {
         return request(app)
-            .get('/all_users')
+            .get('/api/all_users')
             .expect('Content-Type', /json/)
             .expect(200)
             .then((response) => {
@@ -101,7 +101,7 @@ describe('Mesaging API', () => {
 
     it('GET /get_user/id ---> return specific user by ID', () => {
         return request(app)
-            .get('/get_user/id')
+            .get('/api/get_user/id')
             .expect('Content-Type', /json/)
             .expect(200)
             .then((response) => {
