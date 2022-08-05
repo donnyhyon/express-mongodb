@@ -56,10 +56,98 @@ npm run dev
 ```
 Your terminal should confirm your server is running and display port number.
 
-### Creating MongoDB connection.
-9. Create free [MongoDB Atlas account](https://account.mongodb.com/account/login)
+###API TDD using JEST & SUPERTEST.
+9. Install Jest and Supertest frameworks.
+```
+npm i -D jest supertest
+```
+10. Update **jacakge.json** run scripts to run jest upon test command. The '--watchAll' flag auto runs tests upon change/save, (like observr for Ruby Koans). 
+```
+    "test": "jest --watchAll"
+```
+11. Create test file in root directory.
+```
+touch app.test.js
+```
+12. Build test file. 
+Note: Supertest framework replaces the need for services like Postman or Insomnia i.e making GET/POST/PATCH/DELETE requests. [Supertest Docs](https://github.com/visionmedia/supertest)
 
-10. Create a cluster and connect to your cluster via MongoDB's native driver. 
+Jest is for unit testing, like RSpec for Ruby. [Jest Docs](https://jestjs.io/docs/api)
+
+Within **app.test.js**
+```
+const request = require('supertest')
+const app = require('./server')
+
+
+describe('Mesaging API', () => {
+    it('GET /all_users ---> array of users and message contents', () => {
+        return request(app)
+            .get('/all_users')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((response) => {
+                expect(response.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining({
+                            name: expect.any(String),
+                            content: expect.any(String)
+                        })
+                    ])
+
+                )
+            })
+    })
+
+    it('GET /get_user/id ---> return specific user by ID', () => {
+        return request(app)
+            .get('/get_user/id')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((response) => {
+                expect(response.body).toEqual(
+                    expect.objectContaining({
+                        name: expect.any(String),
+                        content: expect.any(String)
+                    })
+                )
+            })
+    })
+
+    it('GET /get_user/id ---> turns 404 if ID doenst exist', () => {
+        return request(app)
+            .get('/get_user/1233352124142362352135y2gfvrvr')
+            .expect(404)
+    })
+
+    it('POST /new_user ----> creates new user', () => {
+        return request(app)
+        .post('/new_user')
+        .send({
+            name: 'Donny',
+            content: 'This is donnys content'
+        })
+        .expect('Content-Type', /json/)
+        .expect(201).then((response) => {
+            expect(response.body).toEqual(
+                expect.objectContaining({
+                    name: 'Donny',
+                    content: 'This is donnys content'
+                })
+            )
+        })
+    })
+})
+```
+13. Run tests- they should all fail as we have not built API yet. 
+```
+npm test
+```
+
+### Creating MongoDB connection.
+14. Create free [MongoDB Atlas account](https://account.mongodb.com/account/login)
+
+15. Create a cluster and connect to your cluster via MongoDB's native driver. 
 Create new project
 ![1-create new project](./READMEimages/1_create_new_project.png)
 
@@ -93,15 +181,15 @@ Choose middle option
 Copy the application code for next step. 
 ![11-cluster application code](./READMEimages/11_cluster_application_code.png)
 
-11. Create new **.env** file to store database application code.
+16. Create new **.env** file to store database application code.
 ```
 touch .env
 ```
-12. Copy and paste the application code into **.env** file. Replace <username> & <password> with the password you created during cluster set-up. The < > should be deleted.
+17. Copy and paste the application code into **.env** file. Replace <username> & <password> with the password you created during cluster set-up. The < > should be deleted.
 ```
 ATLAS_URI = mongodb+srv://<username>:<password>@cluster0.ib7cc.mongodb.net/?retryWrites=true&w=majority
 ```
-13. Setup Mongoose within **server.js** file.
+18. Setup Mongoose within **server.js** file.
 ```
 const mongoose = require('mongoose')
 require('dotenv').config();
@@ -122,7 +210,7 @@ db.once('connected',() => {
 ```
 You should get a message in the terminal confirming database connection. 
 
-14. Creating database models / schema. In **models/user.model.js**
+19. Creating database models / schema. In **models/user.model.js**
 ```
 const mongoose = require("mongoose")
 
@@ -133,7 +221,7 @@ const userSchema = mongoose.Schema({
 
 module.exports = mongoose.model("userSchema", userSchema)
 ```
-15. Creating controllers. In **controllers/user.controller.js**
+20. Creating controllers. In **controllers/user.controller.js**
 ```
 const userModel = require('../models/user.model')
 
@@ -192,7 +280,7 @@ exports.deleteUserByID = async (req,res) => {
 }
 ```
 
-16. Create routes to handle CRUD actions. In **routes/user.js**
+21. Create routes to handle CRUD actions. In **routes/user.js**
 ```
 const express = require("express")
 const router = express.Router()
@@ -211,7 +299,7 @@ router.delete("/delete_user/:id", user_controller.deleteUserByID)
 
 module.exports = router
 ```
-17. Update **server.js** to include routes.  
+22. Update **server.js** to include routes.  
 ```
 const routes = require('./routes/user')
 ```
