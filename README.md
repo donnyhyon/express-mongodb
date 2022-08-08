@@ -56,7 +56,7 @@ npm run dev
 ```
 Your terminal should confirm your server is running and display port number.
 
-###API TDD using JEST & SUPERTEST.
+### API TDD using JEST & SUPERTEST.
 9. Install Jest and Supertest frameworks.
 ```
 npm i -D jest supertest
